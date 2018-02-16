@@ -14,5 +14,10 @@
             <artifactId>javaparser-core</artifactId>
             <version>3.5.14</version>
         </dependency>
+        <dependency>
+            <groupId>com.j2html</groupId>
+            <artifactId>j2html</artifactId>
+            <version>1.2.2</version>
+        </dependency>
     </dependencies>
 </project>
