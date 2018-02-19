@@ -16,24 +16,25 @@ public class HtmlHelper {
 
     public HtmlHelper()
     {
-        this.Table = TagCreator.table().attr("").attr("class='table ttable-striped'")
+        this.Table = TagCreator.table().attr("").attr("class='table table-striped'")
                 .with(tbody()
                 );
     }
 
-    public void addAnomaly()
+    public void addAnomaly(int line, int type)
     {
         this.Table.with(tr(
-                td("label"),
-                td("test")
+                td(span("Line Number: " + line).attr("class=''")),
+                td(span("Anomaly Type: " + type).attr("class=''"))
         ));
     }
 
     public void addSection(String fileName)
     {
         this.Table.with(tr(
-                td(div(fileName).attr("class='alert alert-info' role='alert'")).attr("colspan='2'")//.attr("style='background-color:green;padding:7px'")
-                //td(h4(fileName).attr("class='link text-danger'")).attr("colspan='2'")//.attr("style='background-color:green;padding:7px'")
+                td(div(i().attr("class='glyphicon glyphicon-chevron-right'"), span(" "+fileName))
+                        .attr("class='alert alert-info' role='alert' style='margin-bottom:0'"))
+                        .attr("colspan='2'")
         ));
     }
 
@@ -43,21 +44,23 @@ public class HtmlHelper {
                 .with(meta().attr("charset='utf-8'"))
                 .with(meta().attr("name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\""))
                 .with(TagCreator.link()
-                .attr("rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css'")
-                .attr("rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'")
+                .attr("rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'")
+                //.attr("rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'")
                 );
         this.Html = TagCreator.html().with(head);
 
         String result = this.Html.with(
                 body(
-                        h1(" Report").attr("style='padding:10px'"),
-                        br(),
-                        h5(" Legend:").attr("style='padding:10px'"),
-                        ol(li("Empty catch blocks"), li("Over-catches exceptions and aborts"), li("//TODO or //FixMe")),
+                        h1(i().attr("class='glyphicon glyphicon-list-alt text-primary'"), span("Report")
+                        ).attr("style='padding:7px;padding-top:0px;'"),
+                        h5(i().attr("class='glyphicon glyphicon-chevron-right text-primary'"), span(" Legend:")).attr("style='padding:10px'"),
+                        ol(li("Empty catch blocks"), li("Over-catches exceptions and aborts"),
+                                li("//TODO or //FixMe"),
+                                li("Error")),
                         this.Table,
                         script().attr("src='https://code.jquery.com/jquery-3.1.1.slim.min.js'"),
                         script().attr("src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js'"),
-                        script().attr("src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js'")
+                        script().attr("src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'")
                 )).render();
         System.out.println(result);
         try

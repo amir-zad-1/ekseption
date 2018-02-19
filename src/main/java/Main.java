@@ -31,15 +31,9 @@ public class Main {
         // parse it
         CompilationUnit cu = JavaParser.parse(in);
 
-        // visit and print the methods names
+        // visit and generate report
         HtmlHelper html = new HtmlHelper();
-
         cu.accept(new TryVisitor(), html);
-//        html.addAnomaly();
-//        html.addAnomaly();
-//        html.addSection("file2");
-//        html.addAnomaly();
-//        html.addAnomaly();
         html.generateMarkup("Report");
 
     }
@@ -55,14 +49,23 @@ public class Main {
                 NodeList<Statement> statements = c.getBody().getStatements();
                 int line = c.getRange().get().begin.line;
                 int statement_len = statements.size();
-                //System.out.println(">>" + line + ", " + className);
-
-
                 arg.addSection(className);
+                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
+                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
+                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
+                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
+                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
+                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
             }
 
-
             super.visit(n, arg);
+        }
+
+        private int getAnomalyType(String body)
+        {
+            int result = 4;
+            System.out.println(body);
+            return 0;
         }
 
     }
