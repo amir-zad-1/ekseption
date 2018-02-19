@@ -1,10 +1,13 @@
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import utils.HtmlHelper;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,27 +24,41 @@ public class Main {
             in = new FileInputStream("src/main/java/Main.java");
         }
         catch (FileNotFoundException e)
-        { }
+        {
+
+        }
 
         // parse it
         CompilationUnit cu = JavaParser.parse(in);
 
         // visit and print the methods names
-        cu.accept(new TryVisitor(), null);
+        HtmlHelper html = new HtmlHelper();
+
+        cu.accept(new TryVisitor(), html);
+//        html.addAnomaly();
+//        html.addAnomaly();
+//        html.addSection("file2");
+//        html.addAnomaly();
+//        html.addAnomaly();
+        html.generateMarkup("Report");
 
     }
 
-    private static class TryVisitor extends VoidVisitorAdapter<Void> {
+    private static class TryVisitor extends VoidVisitorAdapter<HtmlHelper> {
         @Override
-        public void visit(TryStmt n, Void arg) {
-            /* here you can access the attributes of the method.
-             this method will be called for all methods in this
-             CompilationUnit, including inner class methods */
+        public void visit(TryStmt n, HtmlHelper arg) {
 
             for (CatchClause c : n.getCatchClauses())
             {
+                CompilationUnit cu = ((CompilationUnit)n.findRootNode());
+                String className = cu.getType(0).asTypeDeclaration().getName().asString() + ".java";
                 NodeList<Statement> statements = c.getBody().getStatements();
-                System.out.println(statements.size());
+                int line = c.getRange().get().begin.line;
+                int statement_len = statements.size();
+                //System.out.println(">>" + line + ", " + className);
+
+
+                arg.addSection(className);
             }
 
 
