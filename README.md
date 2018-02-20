@@ -10,3 +10,5 @@ ekseption is a java tool that finds Anti-patterns (not-well-handled) exceptions 
 
 
 Then it generates a HTML report.
+
+![Report file](https://www.dropbox.com/s/03kky10hw0kbiq1/Screenshot%20from%202018-02-19%2019-02-57.png?raw=1)
