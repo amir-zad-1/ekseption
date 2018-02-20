@@ -26,17 +26,19 @@ public class Main {
         try
         {
             html = new HtmlHelper();
-            String path = "/home/amir/Desktop/6441/Java-Risk-Strategy-Game/soen6441/src/main/java/model";
+            String path = "/home/amir/Desktop/6441/Java-Risk-Strategy-Game";
             File folder = new File(path);
-            //File[] listOfFiles = folder.listFiles();
             listFilesForFolder(folder);
 
             for(File f : files)
             {
-                html.addSection(f.getName(), f.getAbsolutePath());
-                System.out.println(f.getAbsolutePath());
-                in = new FileInputStream(f.getAbsolutePath());
-                parse(in);
+                if(f.getName().contains(".java"))
+                {
+                    html.addSection(f.getName(), f.getAbsolutePath());
+                    System.out.println(f.getAbsolutePath());
+                    in = new FileInputStream(f.getAbsolutePath());
+                    parse(in);
+                }
             }
 
             html.generateMarkup("Report");
