@@ -23,18 +23,45 @@ public class HtmlHelper {
 
     public void addAnomaly(int line, int type)
     {
+        String color = "text-";
+        switch (type)
+        {
+            case 1:
+                color += "primary";
+                break;
+            case 2:
+                color += "warning";
+                break;
+            case 3:
+                color += "success";
+                break;
+            case 4:
+                color += "danger";
+                break;
+            default:
+                color += "muted";
+                    break;
+        }
+
         this.Table.with(tr(
                 td(span("Line Number: " + line).attr("class=''")),
-                td(span("Anomaly Type: " + type).attr("class=''"))
+                td(span("Anomaly Type: " + type + " ").attr("class=''")
+                        .with(i().attr("class='glyphicon glyphicon-tag " + color + "'")))
         ));
     }
 
-    public void addSection(String fileName)
+    public void addSection(String fileName, String path)
     {
         this.Table.with(tr(
-                td(div(i().attr("class='glyphicon glyphicon-chevron-right'"), span(" "+fileName))
-                        .attr("class='alert alert-info' role='alert' style='margin-bottom:0'"))
-                        .attr("colspan='2'")
+                td(
+                        div(
+                                i().attr("class='glyphicon glyphicon-chevron-right'"),
+                                span(" "+fileName + " "),
+                                a(
+                                        i().attr("class='glyphicon glyphicon-new-window'")
+                                ).attr(String.format("href='%s'", path)).attr("target='_blank'")
+                            ).attr("class='alert alert-info' role='alert' style='margin-bottom:0'")
+                ).attr("colspan='2'")
         ));
     }
 
@@ -54,9 +81,12 @@ public class HtmlHelper {
                         h1(i().attr("class='glyphicon glyphicon-list-alt text-primary'"), span("Report")
                         ).attr("style='padding:7px;padding-top:0px;'"),
                         h5(i().attr("class='glyphicon glyphicon-chevron-right text-primary'"), span(" Legend:")).attr("style='padding:10px'"),
-                        ol(li("Empty catch blocks"), li("Over-catches exceptions and aborts"),
-                                li("//TODO or //FixMe"),
-                                li("Error")),
+                        ol(
+                                li(span("Empty catch blocks ").with(i().attr("class='glyphicon glyphicon-tag text-primary'"))),
+                                li(span("Over-catches exceptions and aborts ").with(i().attr("class='glyphicon glyphicon-tag text-warning'"))),
+                                li(span("//TODO or //FixMe ").with(i().attr("class='glyphicon glyphicon-tag text-success'"))),
+                                li(span("Error ").with(i().attr("class='glyphicon glyphicon-tag text-danger'")))
+                        ),
                         this.Table,
                         script().attr("src='https://code.jquery.com/jquery-3.1.1.slim.min.js'"),
                         script().attr("src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js'"),
@@ -76,7 +106,7 @@ public class HtmlHelper {
     }
 
     public void saveToFile(String content) throws IOException {
-        File myFoo = new File("output/foo.html");
+        File myFoo = new File("output/report.html");
         FileWriter fooWriter = new FileWriter(myFoo, false); // true to append
         // false to overwrite.
         fooWriter.write(content);

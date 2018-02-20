@@ -7,65 +7,102 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import utils.Anomaly;
 import utils.HtmlHelper;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class Main {
 
+    private static HtmlHelper html;
+    private static ArrayList<File> files = new ArrayList<File>();
+
     public static void main(String[] args) {
-        System.out.print(":) works");
-        System.out.println(System.getProperty("user.dir"));
         FileInputStream in = null;
 
         try
         {
-            in = new FileInputStream("src/main/java/Main.java");
+            html = new HtmlHelper();
+            String path = "/home/amir/Desktop/6441/Java-Risk-Strategy-Game/soen6441/src/main/java/model";
+            File folder = new File(path);
+            //File[] listOfFiles = folder.listFiles();
+            listFilesForFolder(folder);
+
+            for(File f : files)
+            {
+                html.addSection(f.getName(), f.getAbsolutePath());
+                System.out.println(f.getAbsolutePath());
+                in = new FileInputStream(f.getAbsolutePath());
+                parse(in);
+            }
+
+            html.generateMarkup("Report");
+
         }
         catch (FileNotFoundException e)
         {
-
+            //todo
         }
 
-        // parse it
-        CompilationUnit cu = JavaParser.parse(in);
 
-        // visit and generate report
-        HtmlHelper html = new HtmlHelper();
+    }
+
+    private static void parse(FileInputStream input)
+    {
+        CompilationUnit cu = JavaParser.parse(input);
         cu.accept(new TryVisitor(), html);
-        html.generateMarkup("Report");
+    }
 
+    private static void listFilesForFolder(final File folder) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                files.add(fileEntry);
+            }
+        }
     }
 
     private static class TryVisitor extends VoidVisitorAdapter<HtmlHelper> {
         @Override
         public void visit(TryStmt n, HtmlHelper arg) {
 
+            CompilationUnit cu = ((CompilationUnit)n.findRootNode());
             for (CatchClause c : n.getCatchClauses())
             {
-                CompilationUnit cu = ((CompilationUnit)n.findRootNode());
-                String className = cu.getType(0).asTypeDeclaration().getName().asString() + ".java";
-                NodeList<Statement> statements = c.getBody().getStatements();
-                int line = c.getRange().get().begin.line;
-                int statement_len = statements.size();
-                arg.addSection(className);
-                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
-                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
-                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
-                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
-                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
-                arg.addAnomaly(line, getAnomalyType(c.getBody().toString()));
+                Anomaly anomaly = getAnomalyType(c);
+                if(anomaly != null)
+                    arg.addAnomaly(anomaly.getLine(), anomaly.getType());
             }
 
             super.visit(n, arg);
         }
 
-        private int getAnomalyType(String body)
+        private Anomaly getAnomalyType(CatchClause c)
         {
-            int result = 4;
-            System.out.println(body);
-            return 0;
+            Anomaly result = null;
+            try
+            {
+                NodeList<Statement> statements = c.getBody().getStatements();
+                String body = c.getBody().toString();
+                int line = c.getRange().get().begin.line;
+
+                if(body.toLowerCase().contains("todo") || body.toLowerCase().contains("fixme"))
+                    result = new Anomaly(line, 3);
+                else if (statements.size() == 0)
+                    result = new Anomaly(line, 1);
+
+                System.out.println(body + result );
+            }
+            catch (Exception e)
+            {
+                result = new Anomaly(-1, 4);
+            }
+
+            return result;
         }
 
     }
