@@ -80,13 +80,18 @@ public class HtmlHelper {
                 body(
                         h1(i().attr("class='glyphicon glyphicon-list-alt text-primary'"), span("Report")
                         ).attr("style='padding:7px;padding-top:0px;'"),
-                        h5(i().attr("class='glyphicon glyphicon-chevron-right text-primary'"), span(" Legend:")).attr("style='padding:10px'"),
+                        h4(i().attr("class='glyphicon glyphicon-chevron-right text-primary'"), b(span(" Legend:"))).attr("style='padding:10px'"),
                         ol(
                                 li(span("Empty catch blocks ").with(i().attr("class='glyphicon glyphicon-tag text-primary'"))),
                                 li(span("Over-catches exceptions and aborts ").with(i().attr("class='glyphicon glyphicon-tag text-warning'"))),
                                 li(span("//TODO or //FixMe ").with(i().attr("class='glyphicon glyphicon-tag text-success'"))),
                                 li(span("Error ").with(i().attr("class='glyphicon glyphicon-tag text-danger'")))
                         ),
+                        a(h3(img().withSrc("https://assets-cdn.github.com/images/modules/logos_page/Octocat.png")
+                                .attr("style='width:75px;'"), span("ekseption git-hub reporitory")))
+                                .withHref("https://github.com/hypBox/ekseption").withTarget("_blank")
+                                .attr("style='padding:7px;padding-top:0px;'"),
+
                         this.Table,
                         script().attr("src='https://code.jquery.com/jquery-3.1.1.slim.min.js'"),
                         script().attr("src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js'"),
