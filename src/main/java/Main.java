@@ -27,6 +27,7 @@ public class Main {
         {
             html = new HtmlHelper();
             String path = "/home/amir/Desktop/6441/Java-Risk-Strategy-Game";
+            path = "/home/amir/Workspace/elasticsearch";
             File folder = new File(path);
             listFilesForFolder(folder);
 
