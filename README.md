@@ -12,6 +12,14 @@ Java tool that finds Anti-patterns (not-well-handled) exceptions in a codebase.
 Then it generates a HTML report in the ekseption/output/.
 The screen-shot below is the output file run against [ElasticSearch](https://github.com/elastic/elasticsearch) Repo 
 
+
+# Team Members
+40039878 Amir Mohsen Hossein Zadeh
+40059790 Kartika Patil
+40035954 Jesus Onofre Diaz
+27670036 Aida Rangy
+40018926 Parisa Nikzad
+
 ```sh
 # This is SOEN691 Assignment project. 
 ```
